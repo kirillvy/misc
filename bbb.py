@@ -4,9 +4,9 @@ import time
 
 class RKN:
     def __init__(self, addresses):
-        all = [ IPv4Network(_) for _ in addresses ]
+        all_addresses = [ IPv4Network(_) for _ in addresses ]
         self.data = set()
-        for entry in all:
+        for entry in all_addresses:
             self.data = self.data.union(entry)
 
     def is_banned(self, s):
