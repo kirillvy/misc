@@ -1,14 +1,18 @@
 from ipaddress import IPv4Address, IPv4Network
+import time
+
 
 class RKN:
     def __init__(self, addresses):
-        self.data = [ IPv4Network(_) for _ in addresses ]
+        all = [ IPv4Network(_) for _ in addresses ]
+        self.data = set()
+        for entry in all:
+            self.data = self.data.union(entry)
 
     def is_banned(self, s):
-        # print(self.data, s)
-        for _ in self.data:
-            if IPv4Address(s) in IPv4Network(_):
-                return True
+        # print(self.data, s)=
+        if IPv4Address(s) in self.data:
+            return True
         return False
 
 if __name__ == "__main__":
@@ -20,6 +24,7 @@ if __name__ == "__main__":
     print(r.is_banned('10.255.255.255'))
 
     #test на скорость
+    t0 = time.time()
     x = RKN(['52.58.0.0/15', '18.196.0.0/15','18.194.0.0/15', '35.156.0.0/14'])
     for y in ['52.58.0.0/15', '18.196.0.0/15','18.194.0.0/15', '35.156.0.0/14']:
         for z in list(IPv4Network(y)):
@@ -28,3 +33,7 @@ if __name__ == "__main__":
             else:
                 print("error")
                 break
+    t1 = time.time()
+    total = t1 - t0
+    print(total)
+    # 22.4 секунды, в 3 раза быстрее, чем с массивом
